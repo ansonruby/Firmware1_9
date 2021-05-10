@@ -1,0 +1,6 @@
+@reboot (python /home/pi/Firmware/app/Chicharra.py) #Chicharra
+@reboot (python /home/pi/Firmware/app/Sensor_QR.py) #Sensor_QR
+@reboot (sudo python3.5 /home/pi/Firmware/app/Led.py) #Led
+@reboot (sleep 20; python /home/pi/Firmware/app/Comunicacion_Dispostivos.py) # Comunicacion_Dispostivos
+@reboot (sleep 35;  /home/pi/Firmware/sh/app_30_sleep.sh) #Teclado
+@reboot (sleep 40;  /home/pi/Firmware/sh/app_20_sleep.sh) #Procesar
