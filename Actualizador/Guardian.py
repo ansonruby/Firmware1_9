@@ -85,7 +85,7 @@ while 1:
         Formware = Leer_Archivo(29)
         Firm = Formware.split('\n')
         #print Firm[0].find("Firmware1_8")
-        if Firm[0].find("Firmware1_8") != -1:
+        if Firm[0].find("Firmware1_9") != -1:
             print 'firmware de instalacion tiempo sin ejcutar el sh'
             Tiem_de_activo = commands.getoutput('uptime -p')
             if Tiem_de_activo.find(",") != -1:

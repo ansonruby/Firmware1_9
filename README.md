@@ -1,5 +1,5 @@
-# Firmware1_8
-# Madre : Firmware 1_7
+# Firmware1_9
+# Madre : Firmware 1_8
 # Para  : IF
 #
 # Generador de pines
