@@ -36,17 +36,12 @@ def Nueva_wifi(Texto):
 
 def Torniquete(Datos):
     print('Torniquete')
-    Escrivir_Estados('info, Configurando Torniquete',46)
     Con =len(Datos)
     if Con == 5 :
         print Datos[2]+Datos[4]+"Nueva configuracion tornique"
         print Datos[4][0]
         Escrivir_Estados(str(Datos[4][0]),13)
         Escrivir_Estados(Datos[2],30)
-        time.sleep(3)
-        Escrivir_Estados('ok, Torniquete configurado',46)
-        time.sleep(3)
-        Borrar(46)
         return 1
 
     return 0
@@ -127,36 +122,26 @@ def Restablecer(Datos, Comando):
     Con =len(Datos)
 
     if Datos[1].find("Borrar_Historial") != -1  :
-        Escrivir_Estados('info, Borrando el Historial',46)
         print "Borrardo his"
         Borrar(12)       #Borrar Numero de lecturas
         Escrivir_Estados('0',12) #dejar en 0 las lecturas
 
         Borrar(14)       #Borrar Numero de Reinicios
         Escrivir_Estados('0',14) #dejar en 0 los reinicios
-        time.sleep(3)
-        Escrivir_Estados('ok,Borrado el Historial',46)
-        time.sleep(3)
-        Borrar(46)
 
         return 1
 
     if Datos[1].find("Borrar_Base_de_datos") != -1  :
         print "Borrardo bd"
-        Escrivir_Estados('info, Borrando Base de datos',46)
+
         Borrar(0)       #borrar tabla servidor
         Borrar(1)       #borrar tabla lector
         Borrar(2)       #borrar tabla Enviar
-        time.sleep(3)
-        Escrivir_Estados('ok,Borrada la Base de datos',46)
-        time.sleep(3)
-        Borrar(46)
 
         return 1
 
     if Datos[1].find("Valores_de_fabrica") != -1  :
         print "Borrardo Valores fabrica"
-        Escrivir_Estados('info, Configuranco Valores fabrica',46)
 
         #Base_Datos_Local()
         Borrar(0)       #borrar tabla servidor
@@ -195,10 +180,6 @@ def Restablecer(Datos, Comando):
         Escrivir_Estados('1',30)
 
         #Escrivir_Estados(Estados,3)
-        time.sleep(3)
-        Escrivir_Estados('ok, Valores fabrica',46)
-        time.sleep(3)
-        Borrar(46)
         return 1
 
     if Datos[1].find("TS") != -1  :
