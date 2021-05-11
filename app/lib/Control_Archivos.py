@@ -1,4 +1,8 @@
 
+
+
+import os
+
 N_A_ID_Lector       ='/home/pi/.ID/Datos_Creacion.txt'
 #-------        Data     ----------
 N_A_Servidor		='/home/pi/Firmware/db/Data/Tabla_Servidor.txt'
@@ -252,55 +256,69 @@ def Get_archivo(a):
 
 def Borrar_Archivo(a):
 
-	arch = Get_archivo(a)
-	#print arch
-	archivo = open(arch, "w")
-	archivo.write("")
-	archivo.close()
+    arch = Get_archivo(a)
+    if os.path.exists(arch):
+        archivo = open(arch, "w")
+        archivo.write("")
+        archivo.close()
 
 def Leer_Archivo(a):
 
+    mensaje = ""
     arch = Get_archivo(a)
-    f = open (arch,'r')
-    mensaje = f.read()
-    #print(mensaje)
-    f.close()
-    return mensaje
+    if os.path.exists(arch):
+        f = open (arch,'r')
+        mensaje = f.read()
+        #print(mensaje)
+        f.close()
+        return mensaje
+    else:
+        return mensaje
 
 def Leer_Lineas(a):
 
+    mensaje = ""
     arch = Get_archivo(a)
-    f = open (arch,'r')
-    mensaje = f.readlines()
-    f.close()
-    return mensaje
+    if os.path.exists(arch):
+        f = open (arch,'r')
+        mensaje = f.readlines()
+        f.close()
+        return mensaje
+    else:
+        return mensaje
 
 def Leer_Estado(a):
 
+    mensaje = ""
     arch = Get_archivo(a)
-    f = open (arch,'r')
-    mensaje = f.read()
-    #print(mensaje)
-    f.close()
-    return mensaje
+    if os.path.exists(arch):
+        f = open (arch,'r')
+        mensaje = f.read()
+        #print(mensaje)
+        f.close()
+        return mensaje
+    else:
+        return mensaje
 
 def Escrivir_Estados(Texto, a):
 
     arch = Get_archivo(a)
-    archivo = open(arch, "w")
-    #print(archivo.tell())
-    archivo.write(Texto)
-    #print(archivo.tell())
-    archivo.close()
+    if os.path.exists(arch):
+        archivo = open(arch, "w")
+        #print(archivo.tell())
+        archivo.write(Texto)
+        #print(archivo.tell())
+        archivo.close()
 
 def Escrivir_Archivo(Texto,a):
 
     arch = Get_archivo(a)
-    archivo = open(arch, "a")
-    #print(archivo.tell())
-    archivo.write(Texto + "\n")
-    #print(archivo.tell())
-    archivo.close()
+    if os.path.exists(arch):
+        archivo = open(arch, "a")
+        #print(archivo.tell())
+        archivo.write(Texto + "\n")
+        #print(archivo.tell())
+        archivo.close()
 
 def Leer_Led():
 	global N_A_Estados_Led
