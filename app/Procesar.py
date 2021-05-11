@@ -998,7 +998,7 @@ while 1:
     #print Sta_Ins
     #print len(Sta_Ins)
     if  len(Sta_Ins) != 0:
-        if  Sta_Ins == 'NO':
+        if  Sta_Ins.find("NO") != - 1:
             if Leer_Estado(20) == '0':
                 #print 'no hay actualizaciones pendientes'
                 #print 'revizar otras cosas.'
@@ -1050,6 +1050,6 @@ while 1:
                                 Borrar(47)              #
                                 Escrivir_Estados('NO',47)   # Estado final de la instalacion
                                 commands.getoutput('sudo reboot')
-        elif  Sta_Ins == 'OK':
+        elif Sta_Ins.find("OK") != - 1:
             #print 'web'
             Resolver_Comando_Web()
