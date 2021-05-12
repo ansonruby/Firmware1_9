@@ -5,7 +5,7 @@ define('SSH_PORT', '22'); //your ssh port, defailt is "22"
 define('SSH_USER', 'pi'); //your ssh username, default is "pi"
 define('SSH_PASS', 'fusepong2019'); //your ssh password, default is "raspberry"
 
-define('LOGIN_REQUIRED', false); 		// establecer en "true" si desea habilitar un sistema de inicio de sesión, o "false" para deshabilitarlo
+define('LOGIN_REQUIRED', true); 		// establecer en "true" si desea habilitar un sistema de inicio de sesión, o "false" para deshabilitarlo
 define('LOGIN_USER', 'pi'); 				//set username for login
 define('LOGIN_PASS', 'fusepong2021'); 	//set password for login
 
