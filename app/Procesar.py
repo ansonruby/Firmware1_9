@@ -1031,7 +1031,7 @@ while 1:
                                 #commands.getoutput('sudo reboot')
 
                     else:
-                        print Tiem_de_activo
+                        #print Tiem_de_activo
                         Te = Tiem_de_activo.split(' ')
 
                         if int(Te[1]) >=5:
@@ -1043,13 +1043,16 @@ while 1:
 
                             if len(apache2)>3 and len(php)>3 and len(mysql)>3:
                                 #print 'Revisando Comandos web'
-                                Resolver_Comando_Web()
+                                #Resolver_Comando_Web()
+                                Borrar(47)              #
+                                Escrivir_Estados('OK',47)   # Estado final de la instalacion
                             elif len(apache2) == 0 or len(php) == 0 or len(mysql) == 0:
                                 print 'NO hay nada Instalado reiniciar'
                                 print 'revisar estado de intalacion'
                                 Borrar(47)              #
                                 Escrivir_Estados('NO',47)   # Estado final de la instalacion
                                 commands.getoutput('sudo reboot')
+
         elif Sta_Ins.find("OK") != - 1:
             #print 'web'
             Resolver_Comando_Web()

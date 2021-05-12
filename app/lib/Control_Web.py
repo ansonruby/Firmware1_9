@@ -28,6 +28,8 @@ Test_IP_Dom             = Control_Ethernet.Test_IP_Dominio
 
 Comando_Antes           = Leer_Archivo(42)
 
+CW_mensajes=0    # 0: NO print  1: Print
+
 def Comando_Procesado(Comando):
     Escrivir_Estados(Comando,42)
 
@@ -35,15 +37,23 @@ def Nueva_wifi(Texto):
     Escrivir_Estados(Texto,43)
 
 def Torniquete(Datos):
-    print('Torniquete')
+
+    if CW_mensajes:
+        print('-----------------------------')
+        print('Torniquete')
+        print('info, Configurando Torniquete')
+
     Escrivir_Estados('info, Configurando Torniquete',46)
     Con =len(Datos)
     if Con == 5 :
-        print Datos[2]+Datos[4]+"Nueva configuracion tornique"
-        print Datos[4][0]
+        if CW_mensajes:
+            print "Tiempo: "+Datos[2]+", Direccion: "+Datos[4]
+            #print Datos[4][0]
         Escrivir_Estados(str(Datos[4][0]),13)
         Escrivir_Estados(Datos[2],30)
         time.sleep(3)
+        if CW_mensajes:
+            print('ok, Torniquete configurado')
         Escrivir_Estados('ok, Torniquete configurado',46)
         time.sleep(3)
         Borrar(46)
@@ -90,51 +100,68 @@ def Borrar_Ip_Estatica(a,we):
 
 
 def Comunicaciones(Datos):
-    print('Comunicaciones')
+    if CW_mensajes:
+        print('-----------------------------')
+        print('Comunicaciones')
+
     Con =len(Datos)
     if Con == 19 :
         if Datos[2].find("Ethernet") != -1  :
-            print "IP: "+Datos[4]+Datos[5]+Datos[6]+Datos[7] + "G: "+Datos[9]+Datos[10]+Datos[11]+Datos[12] + "DN: "+Datos[14]+Datos[15]+Datos[16]+Datos[17] +" Configura Ethernet"
+            if CW_mensajes:
+                print "IP: "+Datos[4]+Datos[5]+Datos[6]+Datos[7] + "G: "+Datos[9]+Datos[10]+Datos[11]+Datos[12] + "DN: "+Datos[14]+Datos[15]+Datos[16]+Datos[17] +" Configura Ethernet"
             Ip_Estatica(1, 1, Datos[4]+'.'+Datos[5]+'.'+Datos[6]+'.'+Datos[7], Datos[9]+'.'+Datos[10]+'.'+Datos[11]+'.'+Datos[12], Datos[14]+'.'+Datos[15]+'.'+Datos[16]+'.'+Datos[17])
             return 1
         else                                :
-            print "IP: "+Datos[4]+Datos[5]+Datos[6]+Datos[7] + "G: "+Datos[9]+Datos[10]+Datos[11]+Datos[12] + "DN: "+Datos[14]+Datos[15]+Datos[16]+Datos[17] +"Configura wifi"
+            if CW_mensajes:
+                print "IP: "+Datos[4]+Datos[5]+Datos[6]+Datos[7] + "G: "+Datos[9]+Datos[10]+Datos[11]+Datos[12] + "DN: "+Datos[14]+Datos[15]+Datos[16]+Datos[17] +"Configura wifi"
             Ip_Estatica(1, 0, Datos[4]+'.'+Datos[5]+'.'+Datos[6]+'.'+Datos[7], Datos[9]+'.'+Datos[10]+'.'+Datos[11]+'.'+Datos[12], Datos[14]+'.'+Datos[15]+'.'+Datos[16]+'.'+Datos[17])
             return 1
     if Con == 4 :
         if Datos[2].find("Ethernet") != -1  :
-            print Datos[2]+Datos[3]+"Ethernet Dinamico"
+            if CW_mensajes:
+                print Datos[2]+Datos[3]+"Ethernet Dinamico"
             Borrar_Ip_Estatica(1,1)
             return 1
         else                                :
-            print Datos[2]+Datos[3]+"Wifi Dinamico"
+            if CW_mensajes:
+                print Datos[2]+Datos[3]+"Wifi Dinamico"
             Borrar_Ip_Estatica(1,0)
             return 1
     if Con == 5 :
-        print Datos[2]+Datos[4]+"Nueva wifi"
+        if CW_mensajes:
+            print Datos[2]+Datos[4]+"Nueva wifi"
         red = Datos[2]
         clave = Datos[4]
         commands.getoutput('sudo chmod -R 777 /etc/wpa_supplicant/wpa_supplicant.conf')
         N_wifi='\nnetwork={\n\tssid="'+red+'"\n\tpsk="'+clave+'"\n\tkey_mgmt=WPA-PSK\n\n}'
-        print (N_wifi)
+        if CW_mensajes:
+            print (N_wifi)
         Nueva_wifi(N_wifi)
         return 1
 
     return 0
 
 def Restablecer(Datos, Comando):
-    print('Restablecer')
+
+    if CW_mensajes:
+        print('-----------------------------')
+        print('Restablecer')
+
     Con =len(Datos)
 
     if Datos[1].find("Borrar_Historial") != -1  :
+        if CW_mensajes:
+            print('info, Borrando el Historial')
         Escrivir_Estados('info, Borrando el Historial',46)
-        print "Borrardo his"
+        #print "Borrardo his"
         Borrar(12)       #Borrar Numero de lecturas
         Escrivir_Estados('0',12) #dejar en 0 las lecturas
 
         Borrar(14)       #Borrar Numero de Reinicios
         Escrivir_Estados('0',14) #dejar en 0 los reinicios
         time.sleep(3)
+        if CW_mensajes:
+            print('ok,Borrado el Historial')
         Escrivir_Estados('ok,Borrado el Historial',46)
         time.sleep(3)
         Borrar(46)
@@ -142,12 +169,16 @@ def Restablecer(Datos, Comando):
         return 1
 
     if Datos[1].find("Borrar_Base_de_datos") != -1  :
-        print "Borrardo bd"
+        if CW_mensajes:
+            print('info, Borrando Base de datos')
+        #print "Borrardo bd"
         Escrivir_Estados('info, Borrando Base de datos',46)
         Borrar(0)       #borrar tabla servidor
         Borrar(1)       #borrar tabla lector
         Borrar(2)       #borrar tabla Enviar
         time.sleep(3)
+        if CW_mensajes:
+            print('ok,Borrada la Base de datos')
         Escrivir_Estados('ok,Borrada la Base de datos',46)
         time.sleep(3)
         Borrar(46)
@@ -155,7 +186,9 @@ def Restablecer(Datos, Comando):
         return 1
 
     if Datos[1].find("Valores_de_fabrica") != -1  :
-        print "Borrardo Valores fabrica"
+        if CW_mensajes:
+            print('info, Configuranco Valores fabrica')
+
         Escrivir_Estados('info, Configuranco Valores fabrica',46)
 
         #Base_Datos_Local()
@@ -196,27 +229,29 @@ def Restablecer(Datos, Comando):
 
         #Escrivir_Estados(Estados,3)
         time.sleep(3)
+        if CW_mensajes:
+            print('ok, Valores fabrica')
         Escrivir_Estados('ok, Valores fabrica',46)
         time.sleep(3)
         Borrar(46)
         return 1
 
     if Datos[1].find("TS") != -1  :
-        print "Test nuevo servidor dssf"
+        if CW_mensajes:
+            print('info, Comenzando Test')
+
         Escrivir_Estados('info, Comenzando Test',46)
         Test_Nuevo_Servidor(Comando,"Test")
         return 1
 
     if Datos[1].find("CS") != -1  :
-        print "Conectando nuevo servidor "
+        if CW_mensajes:
+            print('info, Comenzando Conexion')
+
         Escrivir_Estados('info, Comenzando Conexion',46)
         Test_Nuevo_Servidor(Comando,"Conectando")
         return 1
 
-    """
-    if Con == 2 :
-        print Datos[1]
-    """
     return 0
 
 def Resolver_Comando_Web():
@@ -229,9 +264,10 @@ def Resolver_Comando_Web():
     if Comando_Antes != Comando :
         #print Comando
         Datos = Comando.replace(':','.')
-        print Datos
+        if CW_mensajes:
+            print Datos
         Datos = Datos.split('.')
-        print len(Datos)
+        #print len(Datos)
 
         if Datos[0] == 'F':
             if Firmware(Datos, Comando) == 1:    # print('Restablecer')
@@ -252,9 +288,20 @@ def Resolver_Comando_Web():
                 #commands.getoutput('sudo reboot')
 
 def Firmware(Datos, Comando):
-    print 'firmware para analizar'
+    if CW_mensajes:
+        print('-----------------------------')
+        print('firmware')
+
     Escrivir_Estados('1',40)
+
     Escrivir_Estados('info, Forzando Actualizacion',46)
+    time.sleep(3)
+    if CW_mensajes:
+        print('info, ejecutando  Actualizacion')
+    Escrivir_Estados('info, ejecutando  Actualizacion',46)
+    time.sleep(3)
+    Borrar(46)
+    return 1
 
     return 0
 
@@ -262,10 +309,10 @@ def Check_Respuestas(Respuesta):
     #print Respuesta
     #print Respuesta.status_code
     if Respuesta == 'OK':
-        print 'Respuesta correcta'
+        #print 'Respuesta correcta'
         return True
     else:
-        print 'Respuesta incorrecta'
+        #print 'Respuesta incorrecta'
         #print Respuesta.text
         return False
 
@@ -273,9 +320,10 @@ def Check_Respuestas(Respuesta):
 def Test_Nuevo_Servidor(Comando,tipo):
             N_Servidor1 = Comando.split(':')
             N_Servidor = N_Servidor1[1].strip()
-            print '-----------------------------'
-            print N_Servidor
-            print '-----------------------------'
+            if CW_mensajes:
+                print '-----------------------------'
+                print N_Servidor
+                print '-----------------------------'
             Variable_Dominio=''
             Variable_IP=''
             #print 'hola'
@@ -283,34 +331,39 @@ def Test_Nuevo_Servidor(Comando,tipo):
             try:
                     socket.inet_aton(N_Servidor)
                     if N_Servidor.count('.') == 3:
-                        print '---------------------------------'
-                        print '1. revicion de conexion por IP'
-                        print '---------------------------------'
+                        if CW_mensajes:
+                            print '---------------------------------'
+                            print '1. revicion de conexion por IP'
+                            print '---------------------------------'
                         Escrivir_Estados('info, 1. revicion de conexion por IP',46)
-
-                        print 'IP :' +str(N_Servidor)
+                        if CW_mensajes:
+                            print 'IP :' +str(N_Servidor)
                         Respuesta = Test_IP_Dom(N_Servidor, 'http')
                         #print Respuesta
                         #if Respuesta !='NO':
                         if Respuesta.find("Error") == -1:
                             Check_Res= Check_Respuestas(Respuesta)
                             if Check_Res == True:
-                                print 'Esta IP es valida'
+                                if CW_mensajes:
+                                    print 'Esta IP es valida'
 
                                 #Mensajes('Test OK,Esta IP es valida se cambiara, pero el dominio sera el mismo.','OK')
                             else:
-                                print 'Test Error,La IP no Funciona'
+                                if CW_mensajes:
+                                    print 'Test Error,La IP no Funciona'
                                 #Mensajes('Test Error, '+ str(Check_Res)+' La IP no Funciona.','Error')
                         else:
-                            print 'Test Error,La IP no contesto'
+                            if CW_mensajes:
+                                print 'Test Error,La IP no contesto'
                             #Mensajes('Test Error,La IP no contesto.','Error')
 
 
 
             except socket.error:
-                    print '---------------------------------'
-                    print 'NO es una IP revision por Dominio'
-                    print '---------------------------------'
+                    if CW_mensajes:
+                        print '---------------------------------'
+                        print 'NO es una IP revision por Dominio'
+                        print '---------------------------------'
                     Escrivir_Estados('info, Revision por Dominio',46)
                     IP = Dominio_Valido(N_Servidor)
                     Variable_Dominio = N_Servidor
@@ -318,12 +371,13 @@ def Test_Nuevo_Servidor(Comando,tipo):
                     #print IP
                     if IP != False:
                             Test_IP_Dominio=0
-                            print '---------------------------------'
-                            print 'Prueba de coneccion por IP'
-                            print '---------------------------------'
+                            if CW_mensajes:
+                                print '---------------------------------'
+                                print 'Prueba de coneccion por IP'
+                                print '---------------------------------'
+                                print 'IP :' +str(IP)
+                                print 'Con http'
 
-                            print 'IP :' +str(IP)
-                            print 'Con http'
                             Escrivir_Estados('info, Revision por Ip con http',46)
 
                             Respuesta= Test_IP_Dom(IP, 'http')
@@ -333,17 +387,20 @@ def Test_Nuevo_Servidor(Comando,tipo):
                                 Check_Res= Check_Respuestas(Respuesta)
 
                                 if Check_Res == True:
-                                    print 'Esta IP es valida'
+                                    if CW_mensajes:
+                                        print 'Esta IP es valida'
                                     Test_IP_Dominio=10
                                     #Mensajes('Test OK,Esta IP es valida se cambiara, pero el dominio sera el mismo.','OK')
                                 else:
-                                    print 'Test Error, '+ str(Check_Res)+' La IP no Funciona'
+                                    if CW_mensajes:
+                                        print 'Test Error, '+ str(Check_Res)+' La IP no Funciona'
                                     #Mensajes('Test Error, '+ str(Check_Res)+' La IP no Funciona.','Error')
                             else:
-                                print 'Test Error,La IP no contesto'
+                                if CW_mensajes:
+                                    print 'Test Error,La IP no contesto'
 
-
-                            print 'Con https'
+                            if CW_mensajes:
+                                print 'Con https'
                             Escrivir_Estados('info, Revision por IP con https',46)
 
                             Respuesta= Test_IP_Dom(IP, 'https')
@@ -353,23 +410,26 @@ def Test_Nuevo_Servidor(Comando,tipo):
                                 Check_Res= Check_Respuestas(Respuesta)
 
                                 if Check_Res == True:
-                                    print 'Esta IP es valida'
+                                    if CW_mensajes:
+                                        print 'Esta IP es valida'
                                     Test_IP_Dominio=Test_IP_Dominio+100
                                     #Mensajes('Test OK,Esta IP es valida se cambiara, pero el dominio sera el mismo.','OK')
                                 else:
-                                    print 'Test Error, '+ str(Check_Res)+' La IP no Funciona'
+                                    if CW_mensajes:
+                                        print 'Test Error, '+ str(Check_Res)+' La IP no Funciona'
                                     #Mensajes('Test Error, '+ str(Check_Res)+' La IP no Funciona.','Error')
                             else:
-                                print 'Test Error,La IP no contesto'
+                                if CW_mensajes:
+                                    print 'Test Error,La IP no contesto'
 
-
-                            print '---------------------------------'
-                            print 'Prueba de coneccion por Dominio'
-                            print '---------------------------------'
+                            if CW_mensajes:
+                                print '---------------------------------'
+                                print 'Prueba de coneccion por Dominio'
+                                print '---------------------------------'
                             Escrivir_Estados('info, Revision por Dominio',46)
-
-                            print 'Dominio :' +N_Servidor
-                            print 'Con http'
+                            if CW_mensajes:
+                                print 'Dominio :' +N_Servidor
+                                print 'Con http'
                             Escrivir_Estados('info, Revision por Dominio con http',46)
 
                             Respuesta= Test_IP_Dom(N_Servidor, 'http')
@@ -377,15 +437,18 @@ def Test_Nuevo_Servidor(Comando,tipo):
                             if Respuesta !='NO':
                                 Check_Res= Check_Respuestas(Respuesta)
                                 if Check_Res == True:
-                                    print 'Esta Dominio es valida'
+                                    if CW_mensajes:
+                                        print 'Esta Dominio es valida'
                                     Test_IP_Dominio=Test_IP_Dominio+1
                                 else:
-                                    print 'Test Error, '+ str(Check_Res)+' La IP no Funciona'
+                                    if CW_mensajes:
+                                        print 'Test Error, '+ str(Check_Res)+' La IP no Funciona'
                                     #Mensajes('Test Error, '+ str(Check_Res)+' La IP no Funciona.','Error')
                             else:
-                                print 'Test Error,El dominio no contesto'
-
-                            print 'Con https'
+                                if CW_mensajes:
+                                    print 'Test Error,El dominio no contesto'
+                            if CW_mensajes:
+                                print 'Con https'
                             Escrivir_Estados('info, Revision por Dominio con https',46)
 
                             Respuesta= Test_IP_Dom(N_Servidor, 'https')
@@ -394,16 +457,19 @@ def Test_Nuevo_Servidor(Comando,tipo):
                             if Respuesta.find("Error") == -1:
                                 Check_Res= Check_Respuestas(Respuesta)
                                 if Check_Res == True:
-                                    print 'Esta Dominio es valida'
+                                    if CW_mensajes:
+                                        print 'Esta Dominio es valida'
                                     Test_IP_Dominio=Test_IP_Dominio+1000
                                 else:
-                                    print 'Test Error, '+ str(Check_Res)+' La IP no Funciona'
+                                    if CW_mensajes:
+                                        print 'Test Error, '+ str(Check_Res)+' La IP no Funciona'
                                     #Mensajes('Test Error, '+ str(Check_Res)+' La IP no Funciona.','Error')
                             else:
-                                print 'Test Error,El dominio no contesto'
+                                if CW_mensajes:
+                                    print 'Test Error,El dominio no contesto'
 
-
-                            print '--------------fin -------------'
+                            if CW_mensajes:
+                                print '--------------fin -------------'
                             print Test_IP_Dominio
 
 
@@ -429,7 +495,8 @@ def Test_Nuevo_Servidor(Comando,tipo):
 
                             if tipo == 'Conectando':
                                 if Test_IP_Dominio !=0:
-                                    print 'guardando y reiniciando'
+                                    if CW_mensajes:
+                                        print 'guardando y reiniciando'
                                     print Test_IP_Dominio
                                     print Variable_IP
                                     print Variable_Dominio
@@ -449,8 +516,9 @@ def Test_Nuevo_Servidor(Comando,tipo):
 
 
                     else:
-                            print 'Dominio NO Valido, no hay IP asociada'
-                            Escrivir_Estados('error,Dominio NO Valido, no hay IP asociada',46)
+                            if CW_mensajes:
+                                print 'Dominio NO Valido, no hay IP asociada'
+                            Escrivir_Estados('error, Dominio NO Valido, no hay IP asociada',46)
                             #Mensajes('Dominio NO Valido, no hay IP asociada.','Error'
 
                     time.sleep(3)
@@ -459,12 +527,6 @@ def Test_Nuevo_Servidor(Comando,tipo):
 
 
 """
-Ev = Ev.replace('\n','","')
-if ta.find("Error") == -1:
-Pal=Pal.rstrip('\n')
-Pal=Pal.rstrip('\r')
-SQR = QR.split('.')
-
 
 R.Borrar_Historial
 R.Borrar_Base_de_datos
